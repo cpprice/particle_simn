@@ -6,6 +6,7 @@
 # 3. advance x3 to x4 for new Space
 # 4. aggregate old Space, store that, then delete old Space
 
+import math
 
 class Space:
     def __init__(self, size, edge = 1, defaultstep = 0):
@@ -20,15 +21,19 @@ class Space:
 ## need details here
 
 class Particle:
-    def __init__(self, ptype, ptypes, velocity, momentum, position):
+    def __init__(self, ptype, ptypes, space):
         if(ptype == "electron"):
             self.mass = ptypes["electron"].mass
             self.charge = ptypes["electron"].charge
+            self.thermal_speed
+            self.average_velocity
             #etc
-        self.velocity = velocity
-        self.momentum = momentum
-        self.position = position
+        self.velocity = []
+        self.momentum = []
+        self.position = []
         self.KE = 0.5*self.mass*(self.velocity*self.velocity)
+        self.space = space # reference to the space
+        self.dimensions = self.space.dimensions # check to make sure all lists are this size or error
 
     def calculateValues(self):
         self.calculateKE()
@@ -36,6 +41,9 @@ class Particle:
 
     def calculateKE(self):
         self.KE = self.KE + 0.5*self.mass*"velocity^2"
+
+    def calculateCorner(self):
+        return [math.floor(x) for x in position]
 
 class Vector:
     def __init__(self, vectorComponents):
@@ -50,15 +58,10 @@ class Vector:
            dummy += self.vector[i]*oVector[i]
         return dummy
 
-class Cell:
+class Corner:
     def __init__(self, location):
         self.location = location # array of ints representing its location in space
-        self.particles = []
-        self.node = [] # the size depends on the number of dimensions
-
-    def insertParticle(self, particle):
-        self.particles.append(particle)
-        # update node values
+        self.rho = 0
     def calculateNodeValues(self):
         # calculate the new node values now that particles have moved
         
